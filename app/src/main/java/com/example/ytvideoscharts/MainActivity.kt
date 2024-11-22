@@ -1,9 +1,6 @@
 package com.example.ytvideoscharts
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -11,16 +8,12 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import com.example.ytvideoscharts.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-    private val VIDEO_ID = "V2KCAfHjySQ"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,41 +33,12 @@ class MainActivity : AppCompatActivity() {
 
 //        YOUTUBE VIDEO EMBEDDING
 
-        val webView = findViewById<WebView>(R.id.youtube_webview)
+        val videoView1 = findViewById<YouTubeVideoView>(R.id.videoView1)
+        val videoView2 = findViewById<YouTubeVideoView>(R.id.videoView2)
 
-        val webSettings: WebSettings = webView.settings
-        webSettings.javaScriptEnabled = true
-        webSettings.domStorageEnabled = true
+        videoView1.loadVideo("V2KCAfHjySQ") // Replace with the YouTube video IDs from the database
+        videoView2.loadVideo("iYrgWO2oibY")
 
-        val html = """
-            <html>
-                <body style="margin:0; padding:0;">
-                    <iframe id="player" type="text/html" width="100%" height="100%"
-                        src="https://www.youtube.com/embed/$VIDEO_ID?enablejsapi=1"
-                        frameborder="0" allowfullscreen>
-                    </iframe>
-                </body>
-            </html>
-        """
-
-        webView.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(
-                view: WebView, url: String
-            ): Boolean {
-                if (Uri.parse(url).host != "www.youtube.com") {
-                    val intent = Intent(
-                        Intent.ACTION_VIEW, Uri.parse(url)
-                    )
-                    startActivity(intent)
-                    return true
-                }
-                return false
-            }
-        }
-
-        webView.loadData(
-            html, "text/html", "utf-8"
-        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
